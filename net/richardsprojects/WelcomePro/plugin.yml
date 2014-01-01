@@ -1,0 +1,14 @@
+name: WelcomePro
+main: net.richardsprojects.welcomepro.WelcomePro
+version: 0.1.2
+commands:
+   motd:
+      description: This command allows the user to set the welcome MOTD.
+      usage: /<command> <line number (1,2 or 3)> <message>
+      permission: WelcomePro.motd
+      permission-message: You don't have <permission>
+   servername:
+      description: This command sets the server name used in welcome messages. Server names can contain spaces
+      usage: /<command> <Server Name>
+      permission: WelcomePro.servername
+      permission-message: You don't have <permission>
