@@ -23,6 +23,7 @@ public class ServerListener implements Listener {
 		Player player = e.getPlayer();
 		
 		//Remove the join message
+		String message = WelcomePro.serverJoinMessage.replace("PLAYER", player.getName());
 		e.setJoinMessage("");
 		
 		//Display the join message for all the players except the one who joined
@@ -30,7 +31,7 @@ public class ServerListener implements Listener {
 			String playerName = player.getName();
 			if (!(player2.getName().equals(playerName)))
 			{
-				player2.sendMessage(ChatColor.YELLOW + "" + player.getName() + " has joined the game.");
+				player2.sendMessage(message);
 			}
 		}
 		
@@ -60,14 +61,14 @@ public class ServerListener implements Listener {
 	}
 	
 	
-	//Commented out - due to the feature not being implemented yet.
-	/*@EventHandler (priority = EventPriority.HIGH)
+	@EventHandler (priority = EventPriority.HIGH)
 	private void playerLeave(PlayerQuitEvent e)
 	{
 		Player player = e.getPlayer();
 		
-		e.setQuitMessage(ChatColor.BLUE + "[Server] " + ChatColor.YELLOW + "" + player.getName() + "" + ChatColor.BLUE +  "" + " has gone offline.");
-	}*/
+		String message = WelcomePro.serverJoinMessage.replace("PLAYER", player.getName());
+		e.setQuitMessage(message);
+	}
 	
 	@EventHandler (priority = EventPriority.HIGH)
 	private void playerChat(AsyncPlayerChatEvent e)
