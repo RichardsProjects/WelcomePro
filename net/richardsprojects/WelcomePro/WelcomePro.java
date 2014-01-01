@@ -19,6 +19,8 @@ public class WelcomePro extends JavaPlugin {
 	public static String motd_line2 = "";
 	public static String motd_line3 = "";
 	public static String serverName = "";
+	public static String serverLeaveMessage = "";
+	public static String serverJoinMessage = "";
 	
 	public File dataFolder;
 	
@@ -26,6 +28,8 @@ public class WelcomePro extends JavaPlugin {
 	public static File motd2;
 	public static File motd3;
 	public static File serverNameFile;
+	public static File serverLeaveMessageFile;
+	public static File serverJoinMessageFile;
 	
 	@Override
 	public void onEnable()
@@ -68,6 +72,8 @@ public class WelcomePro extends JavaPlugin {
 		motd2 = new File(dataFolder + File.separator + "motd2.txt");
 		motd3 = new File(dataFolder + File.separator + "motd3.txt");
 		serverNameFile = new File(dataFolder + File.separator + "serverName.txt");
+		serverJoinMessageFile = new File(dataFolder + File.separator + "joinMessage.txt");
+		serverLeaveMessageFile = new File(dataFolder + File.separator + "leaveMessage.txt");
 		
 		if(!(dataFolder.exists()))
 		{
@@ -98,6 +104,16 @@ public class WelcomePro extends JavaPlugin {
 			} catch (IOException e) {
 				//Shouldn't occur
 			}
+			try {
+				serverJoinMessageFile.createNewFile();
+			} catch (IOException e) {
+				//Shouldn't occur
+			}
+			try {
+				serverLeaveMessageFile.createNewFile();
+			} catch (IOException e) {
+				//Shouldn't occur
+			}
 			
 			PrintWriter out = new PrintWriter(serverNameFile);
 			out.print("Server Name");
@@ -107,10 +123,7 @@ public class WelcomePro extends JavaPlugin {
 		else
 		{
 			//Check to make sure all files are intact
-			File motd1 = new File(dataFolder + File.separator + "motd1.txt");
-			File motd2 = new File(dataFolder + File.separator + "motd2.txt");
-			File motd3 = new File(dataFolder + File.separator + "motd3.txt");
-			
+		
 			if((!motd1.exists()) || (!motd2.exists()) || (!motd3.exists()))
 			{
 				if(!motd1.exists())
@@ -152,6 +165,32 @@ public class WelcomePro extends JavaPlugin {
 					serverNameFile.createNewFile();
 					PrintWriter out = new PrintWriter(serverNameFile);
 					out.print("Server Name");
+					out.close();
+				} catch (IOException e) {
+					//Shouldn't occur
+				}
+			}
+			
+			if(!serverJoinMessageFile.exists())
+			{
+				try
+				{
+					serverJoinMessageFile.createNewFile();
+					PrintWriter out = new PrintWriter(serverJoinMessageFile);
+					out.print("§ePLAYER has joined the game.");
+					out.close();
+				} catch (IOException e) {
+					//Shouldn't occur
+				}
+			}
+			
+			if(!serverLeaveMessageFile.exists())
+			{
+				try
+				{
+					serverLeaveMessageFile.createNewFile();
+					PrintWriter out = new PrintWriter(serverLeaveMessageFile);
+					out.print("§ePLAYER has left the game.");
 					out.close();
 				} catch (IOException e) {
 					//Shouldn't occur
@@ -224,6 +263,24 @@ public class WelcomePro extends JavaPlugin {
 				serverName = string;
 			}
 			reader4.close();
+		}
+		
+		//Read the contents of the joinMessage file
+		if(serverJoinMessageFile.length() > 0)
+		{
+			BufferedReader reader5 = new BufferedReader(new FileReader(serverJoinMessageFile));
+			String string = reader5.readLine();
+			serverJoinMessage = string;
+			reader5.close();
+		}
+		
+		//Read the contents of the leaveMessage file
+		if(serverLeaveMessageFile.length() > 0)
+		{
+			BufferedReader reader6 = new BufferedReader(new FileReader(serverLeaveMessageFile));
+			String string = reader6.readLine();
+			serverLeaveMessage = string;
+			reader6.close();
 		}
 		
 	}
