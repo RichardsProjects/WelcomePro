@@ -15,10 +15,19 @@ public class ServerNameCommandExecutor implements CommandExecutor {
 		if(args.length > 0)
 		{
 			String name = "";
+			int numberOfIterations = 0;
 			
 			//Combine all words as parameters to create name
 			for (String word: args) {
-		    		name += word + ' ';	    	
+				numberOfIterations ++;
+				if(numberOfIterations == args.length)
+				{
+					name += word;
+				}
+				else
+				{
+					name += word + ' ';
+				}
 		    }
 			
 			//Make sure the name is not more than 15 characters
