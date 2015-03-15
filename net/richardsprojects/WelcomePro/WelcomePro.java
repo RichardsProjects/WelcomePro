@@ -15,21 +15,23 @@ public class WelcomePro extends JavaPlugin {
 	
 	public static ArrayList<Player> playersThatShouldNotSeeChat = new ArrayList<Player>();
 	
-	public static String motd_line1 = "";
-	public static String motd_line2 = "";
-	public static String motd_line3 = "";
+	public static String line1 = "";
+	public static String line2 = "";
+	public static String line3 = "";
 	public static String serverName = "";
 	public static String serverLeaveMessage = "";
 	public static String serverJoinMessage = "";
+	public static MessageType messageType = MessageType.MOTD;
 	
 	public File dataFolder;
 	
-	public static File motd1;
-	public static File motd2;
-	public static File motd3;
+	public static File line1File;
+	public static File line2File;
+	public static File line3File;
 	public static File serverNameFile;
 	public static File serverLeaveMessageFile;
 	public static File serverJoinMessageFile;
+	public static File messageTypeFile;
 	
 	@Override
 	public void onEnable()
@@ -48,8 +50,7 @@ public class WelcomePro extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ServerListener(this), this);
 		
 		//Register Commands
-		getCommand("motd").setExecutor(new MotdCommandExecutor());
-		getCommand("servername").setExecutor(new ServerNameCommandExecutor());
+		getCommand("welcomepro").setExecutor(new WelcomeProCommand(this));
 		
 		//Load MotD values
 		try {
@@ -68,12 +69,13 @@ public class WelcomePro extends JavaPlugin {
 	private void startup() throws FileNotFoundException
 	{
 		dataFolder = getServer().getPluginManager().getPlugin("WelcomePro").getDataFolder();
-		motd1 = new File(dataFolder + File.separator + "motd1.txt");
-		motd2 = new File(dataFolder + File.separator + "motd2.txt");
-		motd3 = new File(dataFolder + File.separator + "motd3.txt");
+		line1File = new File(dataFolder + File.separator + "line1.txt");
+		line2File = new File(dataFolder + File.separator + "line2.txt");
+		line3File  = new File(dataFolder + File.separator + "line3.txt");
 		serverNameFile = new File(dataFolder + File.separator + "serverName.txt");
 		serverJoinMessageFile = new File(dataFolder + File.separator + "joinMessage.txt");
 		serverLeaveMessageFile = new File(dataFolder + File.separator + "leaveMessage.txt");
+		messageTypeFile = new File(dataFolder + File.separator + "messageType.txt");
 		
 		if(!(dataFolder.exists()))
 		{
@@ -83,19 +85,24 @@ public class WelcomePro extends JavaPlugin {
 			
 			//Create the three files that will store information
 
+			//TODO: Make the command give a success message when it is successfully updated
+			//TODO: Change character limit
+			//TODO: Allow them to reference the player by name
+			//TODO: Allow them to set whether it is a message or a motd
+			//TODO: Add welcomepro command
 			
 			try {
-				motd1.createNewFile();
+				line1File.createNewFile();
 			} catch (IOException e) {
 				//Shouldn't occur
 			}
 			try {
-				motd2.createNewFile();
+				line2File.createNewFile();
 			} catch (IOException e) {
 				//Shouldn't occur
 			}
 			try {
-				motd3.createNewFile();
+				line3File.createNewFile();
 			} catch (IOException e) {
 				//Shouldn't occur
 			}
@@ -114,43 +121,59 @@ public class WelcomePro extends JavaPlugin {
 			} catch (IOException e) {
 				//Shouldn't occur
 			}
+			try {
+				messageTypeFile.createNewFile();
+			} catch (IOException e) {
+
+			}
 			
 			PrintWriter out = new PrintWriter(serverNameFile);
 			out.print("Server Name");
 			out.close();
 			
+			PrintWriter out2 = new PrintWriter(messageTypeFile);
+			out2.print("MOTD");
+			out2.close();
+			
+			PrintWriter out3 = new PrintWriter(serverLeaveMessageFile);
+			out3.print("§ePLAYER has left the game.");
+			out3.close();
+			
+			PrintWriter out4 = new PrintWriter(serverJoinMessageFile);
+			out4.print("§ePLAYER has joined the game.");
+			out4.close();
 		}
 		else
 		{
 			//Check to make sure all files are intact
 		
-			if((!motd1.exists()) || (!motd2.exists()) || (!motd3.exists()))
+			if((!line1File.exists()) || (!line2File.exists()) || (!line3File.exists()))
 			{
-				if(!motd1.exists())
+				if(!line1File.exists())
 				{
 					try
 					{
-						motd1.createNewFile();
+						line1File.createNewFile();
 					} catch (IOException e) {
 						//Shouldn't occur
 					}
 				}
 				
-				if(!motd2.exists())
+				if(!line2File.exists())
 				{
 					try
 					{
-						motd2.createNewFile();
+						line2File.createNewFile();
 					} catch (IOException e) {
 						//Shouldn't occur
 					}
 				}
 				
-				if(!motd3.exists())
+				if(!line3File.exists())
 				{
 					try
 					{
-						motd3.createNewFile();
+						line3File.createNewFile();
 					} catch (IOException e) {
 						//Shouldn't occur
 					}
@@ -177,7 +200,7 @@ public class WelcomePro extends JavaPlugin {
 				{
 					serverJoinMessageFile.createNewFile();
 					PrintWriter out = new PrintWriter(serverJoinMessageFile);
-					out.print("Â§ePLAYER has joined the game.");
+					out.print("§ePLAYER has joined the game.");
 					out.close();
 				} catch (IOException e) {
 					//Shouldn't occur
@@ -190,12 +213,22 @@ public class WelcomePro extends JavaPlugin {
 				{
 					serverLeaveMessageFile.createNewFile();
 					PrintWriter out = new PrintWriter(serverLeaveMessageFile);
-					out.print("Â§ePLAYER has left the game.");
+					out.print("§ePLAYER has left the game.");
 					out.close();
 				} catch (IOException e) {
 					//Shouldn't occur
 				}
 			}
+			if(!messageTypeFile.exists())
+			{
+				try {
+					messageTypeFile.createNewFile();
+				} catch (IOException e) {
+					PrintWriter out = new PrintWriter(messageTypeFile);
+					out.print("MOTD");
+					out.close();
+				}
+			}			
 		}
 		
 	}
@@ -203,49 +236,49 @@ public class WelcomePro extends JavaPlugin {
 	private void loadMotdValues() throws IOException
 	{
 		//Read the Contents of line one of the MotD:	
-		if(motd1.length() > 0)
+		if(line1File.length() > 0)
 		{
-			BufferedReader reader1 = new BufferedReader(new FileReader(motd1));
+			BufferedReader reader1 = new BufferedReader(new FileReader(line1File));
 			String motd1 = reader1.readLine();
-			if(motd1.length() > 30)
+			if(line1File.length() > 35)
 			{
-				motd_line1 = "";
+				line1 = "";
 			}
 			else
 			{
-				motd_line1 = motd1;
+				line1 = motd1;
 			}
 			reader1.close();
 		}	
 		
 		//Read the Contents of line two of the MotD:
-		if(motd2.length() > 0)
+		if(line2File.length() > 0)
 		{
-			BufferedReader reader2 = new BufferedReader(new FileReader(motd2));
+			BufferedReader reader2 = new BufferedReader(new FileReader(line2File));
 			String motd2 = reader2.readLine();
-			if(motd2.length() > 30)
+			if(motd2.length() > 35)
 			{
-				motd_line2 = "";
+				line2 = "";
 			}
 			else
 			{
-				motd_line2 = motd2;
+				line2 = motd2;
 			}	
 			reader2.close();
 		}
 		
 		//Read the Contents of line three of the MotD:
-		if(motd3.length() > 0)
+		if(line3File.length() > 0)
 		{
-			BufferedReader reader3 = new BufferedReader(new FileReader(motd3));
+			BufferedReader reader3 = new BufferedReader(new FileReader(line3File));
 			String motd3 = reader3.readLine();
-			if(motd3.length() > 30)
+			if(motd3.length() > 35)
 			{
-				motd_line3 = "";
+				line3 = "";
 			}
 			else
 			{
-				motd_line3 = motd3;
+				line3 = motd3;
 			}
 			reader3.close();
 		}
@@ -281,6 +314,16 @@ public class WelcomePro extends JavaPlugin {
 			String string = reader6.readLine();
 			serverLeaveMessage = string;
 			reader6.close();
+		}
+		//Read the contents of the message type file
+		if(messageTypeFile.length() > 0)
+		{
+			BufferedReader reader7 = new BufferedReader(new FileReader(messageTypeFile));
+			String string = reader7.readLine();
+			if(string.equals("MESSAGE")) {
+				messageType = MessageType.MESSAGE;
+			}
+			reader7.close();
 		}
 		
 	}

@@ -39,13 +39,17 @@ public class ServerListener implements Listener {
 			WelcomePro.playersThatShouldNotSeeChat.add(player);
 			player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "" + WelcomePro.serverName + ":");
 			player.sendMessage("");
-			player.sendMessage("");
 			player.sendMessage(ChatColor.YELLOW + "    Welcome back, " + ChatColor.BLUE + "" + player.getName() + "!");
 			player.sendMessage("");
-			if(!(WelcomePro.motd_line1.equals(""))) {
-				player.sendMessage("    MOTD: " + WelcomePro.motd_line1);
-				player.sendMessage("    " + WelcomePro.motd_line2);
-				player.sendMessage("    " + WelcomePro.motd_line3);
+			if(!(WelcomePro.line1.equals("")) || !(WelcomePro.line2.equals("")) || !(WelcomePro.line3.equals(""))) {
+				if(WelcomePro.messageType == MessageType.MOTD) {
+					player.sendMessage("    " + ChatColor.RED + "" + ChatColor.BOLD + "Message of the Day: ");
+				} else {
+					player.sendMessage("");
+				}
+				player.sendMessage("    " + WelcomePro.line1);
+				player.sendMessage("    " + WelcomePro.line2);
+				player.sendMessage("    " + WelcomePro.line3);
 				player.sendMessage("");
 			}
 			else

@@ -1,0 +1,10 @@
+name: WelcomePro
+main: net.richardsprojects.welcomepro.WelcomePro
+version: 0.1.6
+commands:
+   welcomepro:
+      description: This is the main command of the plugin
+      usage: /<command>
+      permission: WelcomePro.admin
+      permission-message: You don't have <permission>
+      aliases: wp
