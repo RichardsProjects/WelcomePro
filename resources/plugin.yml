@@ -1,6 +1,6 @@
 name: WelcomePro
 main: net.richardsprojects.welcomepro.WelcomePro
-version: 0.1.8
+version: 2.0.0
 commands:
    welcomepro:
       description: This is the main command of the plugin

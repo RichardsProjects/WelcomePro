@@ -22,8 +22,8 @@ public class ServerListener implements Listener {
 		Player player = e.getPlayer();
 
 		// Remove the join message
-		String message = WelcomePro.serverJoinMessage.replace("PLAYER",
-				player.getName());
+		String message = Utils.colorCodes(WelcomePro.serverJoinMessage.replace(
+				"PLAYER", player.getName()));
 		e.setJoinMessage("");
 
 		// Display the join message for all the players except the one who
@@ -31,7 +31,7 @@ public class ServerListener implements Listener {
 		for (Player player2 : plugin.getServer().getOnlinePlayers()) {
 			String playerName = player.getName();
 			if (!(player2.getName().equals(playerName))) {
-				player2.sendMessage(message);
+				if(!message.equals("")) player2.sendMessage(message);
 			}
 		}
 
@@ -52,9 +52,9 @@ public class ServerListener implements Listener {
 				} else {
 					player.sendMessage("");
 				}
-				player.sendMessage("    " + WelcomePro.line1);
-				player.sendMessage("    " + WelcomePro.line2);
-				player.sendMessage("    " + WelcomePro.line3);
+				player.sendMessage(Utils.colorCodes("    " + WelcomePro.line1));
+				player.sendMessage(Utils.colorCodes("    " + WelcomePro.line2));
+				player.sendMessage(Utils.colorCodes("    " + WelcomePro.line3));
 				player.sendMessage("");
 			} else {
 				player.sendMessage("    There is no Message of the Day");
@@ -75,7 +75,7 @@ public class ServerListener implements Listener {
 
 		String message = WelcomePro.serverLeaveMessage.replace("PLAYER",
 				player.getName());
-		e.setQuitMessage(message);
+		e.setQuitMessage(Utils.colorCodes(message));
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)

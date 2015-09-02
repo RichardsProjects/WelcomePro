@@ -137,7 +137,7 @@ public class WelcomeProCommand implements CommandExecutor {
 										out.close();
 										sender.sendMessage(ChatColor.YELLOW
 												+ "Line 1 updated to \""
-												+ line1 + "\"");
+												+ Utils.colorCodes(line1) + "\"");
 									} catch (FileNotFoundException e) {
 										sender.sendMessage("There was an error updating the line. Please check the file permissions.");
 									}
@@ -180,7 +180,7 @@ public class WelcomeProCommand implements CommandExecutor {
 										out.close();
 										sender.sendMessage(ChatColor.YELLOW
 												+ "Line 2 updated to \""
-												+ line2 + "\"");
+												+ Utils.colorCodes(line2) + "\"");
 									} catch (FileNotFoundException e) {
 										sender.sendMessage("There was an error updating the line. Please check the file permissions.");
 									}
@@ -223,7 +223,7 @@ public class WelcomeProCommand implements CommandExecutor {
 										out.close();
 										sender.sendMessage(ChatColor.YELLOW
 												+ "Line 3 updated to \""
-												+ line3 + "\"");
+												+ Utils.colorCodes(line3) + "\"");
 									} catch (FileNotFoundException e) {
 										sender.sendMessage("There was an error updating the line. Please check the file permissions.");
 									}
@@ -266,7 +266,7 @@ public class WelcomeProCommand implements CommandExecutor {
 										out.close();
 										sender.sendMessage(ChatColor.YELLOW
 												+ "Join Message updated to \""
-												+ joinMessage + "\"");
+												+ Utils.colorCodes(joinMessage) + "\"");
 									} catch (FileNotFoundException e) {
 										sender.sendMessage("There was an" + 
 											"error updating the line. Please check the file permissions.");
@@ -310,7 +310,7 @@ public class WelcomeProCommand implements CommandExecutor {
 										out.close();
 										sender.sendMessage(ChatColor.YELLOW
 												+ "Leave Message updated to \""
-												+ leaveMessage + "\"");
+												+ Utils.colorCodes(leaveMessage) + "\"");
 									} catch (FileNotFoundException e) {
 										sender.sendMessage("There was an error updating the line. Please check the file permissions.");
 									}
